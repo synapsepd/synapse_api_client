@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors       = ["Adam Saegebarth"]
   s.email         = ["adams@synapse.com"]
   s.description   = %q{Client to consume Synapse REST API}
-  s.summary       = %q{TODO: Write a s summary}
+  s.summary       = s.description 
   s.homepage      = ""
 
   s.add_dependency 'rake'
