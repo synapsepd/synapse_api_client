@@ -4,6 +4,22 @@ module SynapseApiClient
   autoload :WifiPassword, 'synapse_api_client/wifi_password'
   autoload :User, 'synapse_api_client/user'
 
+  # The exception class from which all Recurly exceptions inherit.
+  class Error < StandardError
+    def set_message message
+      @message = message
+    end
+
+    # @return [String]
+    def to_s
+      defined? @message and @message or super
+    end
+  end
+
+  # This exception is raised if Recurly has not been configured.
+  class ConfigurationError < Error
+  end
+
   class << self
 
     def connect
