@@ -2,7 +2,7 @@ module SynapseApiClient
   class WifiPassword
     def self.get_password
       @connection = SynapseApiClient.connect
-      response = @conn.get do |req|
+      response = @connection.get do |req|
         req.url "wifi_password.json"
       end
       response.body
