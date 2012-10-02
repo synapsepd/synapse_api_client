@@ -38,7 +38,7 @@ module SynapseApiClient
 
     def api_key
       defined? @api_key and @api_key or raise(
-        ConfigurationError, "Recurly.api_key not configured"
+        ConfigurationError, "SynapseApiClient.api_key not configured"
       )
     end
 
