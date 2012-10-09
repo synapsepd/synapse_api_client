@@ -9,6 +9,16 @@ module SynapseApiClient
       response.body
     end
 
+    def self.search(query)
+      @connection = SynapseApiClient.connect
+      response = @connection.get do |req|
+        req.url "users/search.json"
+        req.params['auth_token'] = SynapseApiClient.api_key
+        req.params['q'] = query
+      end
+      response.body
+    end
+
     def self.is_member_of_group(account_name, group_dn)
       @connection = SynapseApiClient.connect
       response = @connection.get do |req|
