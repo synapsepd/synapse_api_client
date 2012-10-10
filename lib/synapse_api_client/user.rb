@@ -36,5 +36,9 @@ module SynapseApiClient
       end
       response.body
     end
+
+    def where(field_name, value)
+      @users = @users.find_all { |person| person.field_name == params[:value] }
+    end
   end
 end

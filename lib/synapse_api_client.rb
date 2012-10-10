@@ -32,6 +32,10 @@ module SynapseApiClient
          conn.use :instrumentation
          conn.adapter :net_http
          conn.headers[:user_agent] = 'MyLib v1.2'
+         cache_dir = File.join(ENV['TMPDIR'] || '/tmp', 'cache')
+         conn.response :caching, :ignore_params => %w[auth_token] do
+           ActiveSupport::Cache::FileStore.new cache_dir, :namespace => 'synapse', :expires_in => 216000  # one hour
+         end
        end
     end
     attr_writer :connection
