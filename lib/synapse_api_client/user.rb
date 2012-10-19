@@ -28,6 +28,15 @@ module SynapseApiClient
       response.body
     end
 
+    def self.update_attribute(account_name, value)
+      @connection = SynapseApiClient.connect
+      response = @connection.put "users/#{account_name}" do |req|
+        req.params['auth_token'] = SynapseApiClient.api_key
+        req.params['value'] = value
+      end
+      response.body
+    end
+
     def self.all
       @connection = SynapseApiClient.connect
       response = @connection.get do |req|
