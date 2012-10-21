@@ -1,4 +1,7 @@
 require "synapse_api_client/version"
+require "faraday"
+require "faraday_middleware"
+require "hashie"
 
 module SynapseApiClient
   autoload :WifiPassword, 'synapse_api_client/wifi_password'
@@ -30,12 +33,12 @@ module SynapseApiClient
          conn.response :logger
          conn.response :raise_error
          conn.use :instrumentation
-         if SynapseApiClient.caching
-           cache_dir = File.join(ENV['TMPDIR'] || '/tmp', 'cache')
-           conn.response :caching, :ignore_params => %w[auth_token] do
-             ActiveSupport::Cache::FileStore.new cache_dir, :namespace => 'synapse', :expires_in => 3600  # one hour
-           end
-         end
+         # if SynapseApiClient.caching
+         #   cache_dir = File.join(ENV['TMPDIR'] || '/tmp', 'cache')
+         #   conn.response :caching, :ignore_params => %w[auth_token] do
+         #     ActiveSupport::Cache::FileStore.new cache_dir, :namespace => 'synapse', :expires_in => 3600  # one hour
+         #   end
+         # end
          conn.adapter Faraday.default_adapter
 
        end

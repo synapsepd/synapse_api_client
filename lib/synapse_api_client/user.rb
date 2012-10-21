@@ -9,27 +9,20 @@ module SynapseApiClient
       response.body
     end
 
-    def self.search(query=nil)
+    def self.search(params={}, field_names=[])
       @connection = SynapseApiClient.connect
       response = @connection.get do |req|
         req.params['auth_token'] = SynapseApiClient.api_key
-        if query
+        if params['q']
           req.url "users/search.json"
-          req.params['q'] = query
+          req.params['q'] = params['q']
         else
           req.url "users.json"
         end
       end
-      response.body
-    end
-
-    def self.is_member_of_group(account_name, group_dn)
-      @connection = SynapseApiClient.connect
-      response = @connection.get do |req|
-        req.url "users/#{account_name}/group/#{URI.escape(group_dn)}.json"
-        req.params['auth_token'] = SynapseApiClient.api_key
-      end
-      response.body
+      users = response.body
+      users = SynapseApiClient::User.filter_by(users, field_names, params)
+      users = SynapseApiClient::User.sort_by(users, params[:sort_by], params[:order] ? params[:order] : 'desc')
     end
 
     def self.update_attribute(account_name, value)
@@ -50,26 +43,28 @@ module SynapseApiClient
       response.body
     end
 
-    def filter_by(field_names = [])
-      field_names.each do |f|
-        @users = @users.find_all { |u| u.field_name == params[field_name.to_sym]}
+    private
+
+    def self.filter_by(users, field_names = [], params = {})
+      if field_names
+        field_names.each do |f|
+          if params[f.to_sym]
+            users = users.find_all { |u| u[f].downcase == params[f.to_sym].downcase }
+          end
+        end
       end
-      @users
+      users
     end
 
-    def sort_by(field_name, order)
+    def self.sort_by(users, field_name, order)
       if field_name
-        if field_name == 'name'
-          @users = @users.sort! { |a, b| a.last_name <=> b.last_name }
-        elsif field_name == 'start_date'
-          @users = @users.sort! { |a, b| a.start_date <=> b.start_date }
-        elsif field_name == 'department'
-          @users = @users.sort! { |a, b| a.department <=> b.department }
-        end
-
         if order == 'desc'
-          @users.reverse
+          users = users.sort! { |a, b| a[field_name] <=> b[field_name] }.reverse
+        else
+          users = users.sort! { |a, b| a[field_name] <=> b[field_name] }
         end
+      else
+        users
       end
     end
   end
