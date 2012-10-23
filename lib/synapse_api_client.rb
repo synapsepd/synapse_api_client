@@ -6,6 +6,7 @@ require "hashie"
 module SynapseApiClient
   autoload :WifiPassword, 'synapse_api_client/wifi_password'
   autoload :User, 'synapse_api_client/user'
+  autoload :Statusnet, 'synapse_api_client/statusnet'
 
   # The exception class from which all Recurly exceptions inherit.
   class Error < StandardError
