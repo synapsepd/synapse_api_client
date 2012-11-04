@@ -27,19 +27,19 @@ module SynapseApiClient
   class << self
 
     def connect
-      @connection = Faraday.new(:url => 'https://api-dev.synapse.com/v1/', :ssl => { :verify => false}) do |conn|
+      @connection = Faraday.new(:url => @api_url, :ssl => { :verify => false}) do |conn|
          conn.request  :url_encoded
          conn.response :mashify
          conn.response :json
          conn.response :logger
          conn.response :raise_error
          conn.use :instrumentation
-         # if SynapseApiClient.caching
-         #   cache_dir = File.join(ENV['TMPDIR'] || '/tmp', 'cache')
-         #   conn.response :caching, :ignore_params => %w[auth_token] do
-         #     ActiveSupport::Cache::FileStore.new cache_dir, :namespace => 'synapse', :expires_in => 3600  # one hour
-         #   end
-         # end
+         if @caching
+           cache_dir = File.join(ENV['TMPDIR'] || '/tmp', 'cache')
+           conn.response :caching, :ignore_params => %w[auth_token] do
+             ActiveSupport::Cache::FileStore.new cache_dir, :namespace => 'synapse', :expires_in => 1800  # one hour
+           end
+         end
          conn.adapter Faraday.default_adapter
 
        end
@@ -52,11 +52,18 @@ module SynapseApiClient
       )
     end
 
+    def api_url
+      defined? @api_url and @api_url or raise(
+        ConfigurationError, "SynapseApiClient.api_url not configured"
+      )
+    end
+
     def caching
-      defined? @caching or @caching = false
+      defined? @caching and @caching or @caching = false
     end
 
     attr_writer :api_key
+    attr_writer :api_url
     attr_writer :caching
 
   end
