@@ -7,6 +7,7 @@ module SynapseApiClient
   autoload :WifiPassword, 'synapse_api_client/wifi_password'
   autoload :User, 'synapse_api_client/user'
   autoload :Statusnet, 'synapse_api_client/statusnet'
+  autoload :Calendar, 'synapse_api_client/calendar'
 
   # The exception class from which all Recurly exceptions inherit.
   class Error < StandardError
