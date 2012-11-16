@@ -1,20 +1,19 @@
 module SynapseApiClient
-  class Calendar
+  class Location
     def self.all
       @connection = SynapseApiClient.connect
       response = @connection.get do |req|
-        req.url "calendar.json"
+        req.url "locations.json"
         req.params['auth_token'] = SynapseApiClient.api_key
       end
       response.body
     end
 
-    def self.find(id, group_by=nil)
+    def self.find(id)
       @connection = SynapseApiClient.connect
       response = @connection.get do |req|
-        req.url "calendar/#{id}.json"
+        req.url "locations/#{id}.json"
         req.params['auth_token'] = SynapseApiClient.api_key
-        req.params['group_by'] = group_by if group_by
       end
       response.body
     end

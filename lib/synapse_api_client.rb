@@ -8,6 +8,7 @@ module SynapseApiClient
   autoload :User, 'synapse_api_client/user'
   autoload :Statusnet, 'synapse_api_client/statusnet'
   autoload :Calendar, 'synapse_api_client/calendar'
+  autoload :Location, 'synapse_api_client/location'
 
   # The exception class from which all Recurly exceptions inherit.
   class Error < StandardError
