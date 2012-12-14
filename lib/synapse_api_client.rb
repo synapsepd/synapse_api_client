@@ -9,8 +9,9 @@ module SynapseApiClient
   autoload :Statusnet, 'synapse_api_client/statusnet'
   autoload :Calendar, 'synapse_api_client/calendar'
   autoload :Location, 'synapse_api_client/location'
+  autoload :Conference, 'synapse_api_client/conference'
 
-  # The exception class from which all Recurly exceptions inherit.
+  # The exception class from which all exceptions inherit.
   class Error < StandardError
     def set_message message
       @message = message
