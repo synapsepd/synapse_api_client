@@ -34,7 +34,7 @@ module SynapseApiClient
          conn.request  :url_encoded
          conn.response :mashify
          conn.response :json
-         conn.response :logger
+         conn.response :logger unless Rails.env.production?
          conn.response :raise_error
          conn.use :instrumentation
          if @caching
